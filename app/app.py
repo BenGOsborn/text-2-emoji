@@ -6,18 +6,26 @@ import json
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
 def preprocess(text):
     return "".join(char for char in text if char in string.ascii_letters + " " + string.digits)
 
-def extract_first_emoji(text):
+
+def extract_emojis(text):
+    out = []
+
     for char in text:
         if emoji.is_emoji(char):
-            return char
-    
-    raise Exception("Failed to find emoji")
+            out.append(char)
 
-def generate_prompt(input_processed):
-    return f"Generate a emoji that represents the following text:\n\n'I am very happy right now': 😂\n'I am going to the beach on Saturday': 🏖\n'The movies are going to be fun tomorrow': 🎥\n'{input_processed}': "
+    return out
+
+
+def generate_prompt(text):
+    return "Generate a list of emojis that represents the following text:\n" + \
+        "\n'I am very happy right now': 😂😄😃" + "\n'I am going to the beach on Saturday': 🏖👙⛱" + \
+        "\n'The movies are going to be fun tomorrow': 🎥🎬🍿\n" + f"\n'{text}': "
+
 
 def lambda_handler(event, context):
     input_raw = json.loads(event["body"])["input"]
@@ -25,23 +33,23 @@ def lambda_handler(event, context):
 
     response = openai.Completion.create(
         model="text-davinci-002",
-        prompt=f"Generate a emoji that represents the following text:\n\n'I am very happy right now': 😂\n'I am going to the beach on Saturday': 🏖\n'The movies are going to be fun tomorrow': 🎥\n'{input_processed}': ",
+        prompt=generate_prompt(input_processed),
         temperature=0,
         max_tokens=60,
     )
     text_raw = response["choices"][0]["text"]
 
-    text_processed = extract_first_emoji(text_raw)
-
     return {
         "statusCode": 200,
-        "body": json.dumps({"emoji": text_processed})
+        "body": json.dumps({"emoji": extract_emojis(text_raw)})
     }
 
-if __name__ == "__main__":
-    sample_text = "The storm cloud looks scary"
 
-    response = lambda_handler({"body": json.dumps({"input": sample_text})}, None)
+if __name__ == "__main__":
+    sample_text = "University is really starting to irritate me"
+
+    response = lambda_handler(
+        {"body": json.dumps({"input": sample_text})}, None)
 
     parsed = json.loads(response["body"])["emoji"]
 
