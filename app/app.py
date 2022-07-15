@@ -37,7 +37,7 @@ def lambda_handler(event, context):
         model="text-davinci-002",
         prompt=generate_prompt(input_processed),
         temperature=0,
-        max_tokens=60,
+        max_tokens=30,
     )
     text_raw = response["choices"][0]["text"]
 
