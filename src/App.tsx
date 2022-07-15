@@ -17,7 +17,11 @@ function App() {
                     e.preventDefault();
                     const value = (e.target as any).text.value;
 
-                    console.log(await submit(apiUrl, apiKey, value));
+                    const data = await submit(apiUrl, apiKey, value);
+                    setEmoji(data);
+
+                    // @ts-ignore
+                    e.target.reset();
                 }}
             >
                 <label htmlFor="text">Text</label>
