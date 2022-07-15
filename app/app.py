@@ -37,3 +37,12 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "body": json.dumps({"emoji": text_processed})
     }
+
+if __name__ == "__main__":
+    sample_text = "The storm cloud looks scary"
+
+    response = lambda_handler({"body": json.dumps({"input": sample_text})}, None)
+
+    parsed = json.loads(response["body"])["emoji"]
+
+    print(parsed)
