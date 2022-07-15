@@ -8,3 +8,4 @@ s3_prefix = "emoji-2-text-function"
 region = "ap-southeast-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
+image_repositories = ["EmojiToTextFunction=641490273710.dkr.ecr.ap-southeast-2.amazonaws.com/emoji2textfunction8021bb03/emojitotextfunction1f1541d9repo"]
