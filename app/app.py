@@ -12,11 +12,13 @@ def preprocess(text):
 
 
 def extract_emojis(text):
+    seen = {}
     out = []
 
     for char in text:
-        if emoji.is_emoji(char):
+        if emoji.is_emoji(char) and char not in seen:
             out.append(char)
+            seen[char] = True
 
     return out
 
