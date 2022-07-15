@@ -5,4 +5,4 @@ COPY app.py .
 COPY requirements.txt  .
 RUN  pip3 install -r requirements.txt
 
-CMD [ "app.handler" ]
+CMD [ "app.lambda_handler" ]
