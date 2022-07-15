@@ -2,6 +2,7 @@ import os
 import openai
 import string
 import emoji
+import json
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -15,23 +16,24 @@ def extract_first_emoji(text):
     
     raise Exception("Failed to find emoji")
 
-def main():
-    input_raw = "That food smells really nasty"
+def generate_prompt(input_processed):
+    return f"Generate a emoji that represents the following text:\n\n'I am very happy right now': 😂\n'I am going to the beach on Saturday': 🏖\n'The movies are going to be fun tomorrow': 🎥\n'{input_processed}': "
+
+def lambda_handler(event, context):
+    input_raw = json.loads(event["body"])["input"]
     input_processed = preprocess(input_raw)
 
     response = openai.Completion.create(
         model="text-davinci-002",
         prompt=f"Generate a emoji that represents the following text:\n\n'I am very happy right now': 😂\n'I am going to the beach on Saturday': 🏖\n'The movies are going to be fun tomorrow': 🎥\n'{input_processed}': ",
-        temperature=0.3,
+        temperature=0,
         max_tokens=60,
     )
     text_raw = response["choices"][0]["text"]
 
-    print(text_raw)
-
     text_processed = extract_first_emoji(text_raw)
 
-    print(text_processed)
-
-if __name__ == "__main__":
-    main()
+    return {
+        "statusCode": 200,
+        "body": json.dumps({"emoji": text_processed})
+    }
