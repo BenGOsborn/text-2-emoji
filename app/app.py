@@ -6,9 +6,10 @@ import json
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+MAX_INPUT_LENGTH = 300
 
 def preprocess(text):
-    return "".join(char for char in text if char in string.ascii_letters + " " + string.digits)
+    return "".join(char for char in text if char in string.ascii_letters + " " + string.digits)[:MAX_INPUT_LENGTH]
 
 
 def extract_emojis(text):
