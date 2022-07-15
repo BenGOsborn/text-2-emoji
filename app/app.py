@@ -43,7 +43,11 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
-        "body": json.dumps({"emoji": extract_emojis(text_raw)})
+        "body": json.dumps({"emoji": extract_emojis(text_raw)}),
+        "headers": {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
     }
 
 
