@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import "../styles/index.css";
 import { submit } from "./submit";
 
 function App() {
