@@ -5,6 +5,8 @@ import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <App />
+        <main className="w-1/3 mx-auto">
+            <App />
+        </main>
     </React.StrictMode>
 );
