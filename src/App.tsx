@@ -7,7 +7,7 @@ function App() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const apiKey = import.meta.env.VITE_API_KEY;
 
-    const [emoji, setEmoji] = useState<string[] | null>(null);
+    const [emoji, setEmoji] = useState<{ text: string; emoji: string[] } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     return (
@@ -27,7 +27,7 @@ function App() {
 
                         submit(apiUrl, apiKey, value)
                             .then((data) => {
-                                setEmoji(data);
+                                setEmoji({ emoji: data, text: value });
 
                                 // @ts-ignore
                                 e.target.reset();
@@ -51,7 +51,10 @@ function App() {
             {emoji && (
                 <>
                     <p className="text-lg font-bold text-gray-800">Best matching emojis:</p>
-                    <p className="bg-gray-200 cursor-text rounded-md p-3 text-4xl">{emoji.join(" ")}</p>
+                    <p className="bg-gray-200 cursor-text rounded-md p-3 text-4xl">{emoji.emoji.join(" ")}</p>
+                    <p className="text-sm font-normal text-gray-700">
+                        <span className="font-medium">Original Text:</span> <span className="italic">{emoji.text}</span>
+                    </p>
                 </>
             )}
         </div>
