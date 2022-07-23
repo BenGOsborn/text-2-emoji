@@ -7,9 +7,12 @@ import json
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 MAX_INPUT_LENGTH = 300
+ALLOWED_CHARACTERS = (string.ascii_letters + string.whitespace + string.digits + string.punctuation).replace("'", "")
 
 def preprocess(text):
-    return "".join(char for char in text if char in string.ascii_letters + " " + string.digits)[:MAX_INPUT_LENGTH]
+    processed = "".join(char for char in text if char in ALLOWED_CHARACTERS)[:MAX_INPUT_LENGTH]
+
+    return processed
 
 
 def extract_emojis(text):
@@ -52,7 +55,7 @@ def lambda_handler(event, context):
 
 
 if __name__ == "__main__":
-    sample_text = "University is really starting to irritate me"
+    sample_text = "University is really starting to irritate me. I wish that I could go to the beach instead. The park is pretty fun too!"
 
     response = lambda_handler(
         {"body": json.dumps({"input": sample_text})}, None)
